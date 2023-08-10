@@ -35,7 +35,7 @@ export type SetTasksActionType = {
     todolistId: string
  }
 
-type ActionsType = RemoveTaskActionType | AddTaskActionType
+export type TasksActionsType = RemoveTaskActionType | AddTaskActionType
     | ChangeTaskStatusActionType
     | ChangeTaskTitleActionType
     | AddTodolistActionType
@@ -63,7 +63,7 @@ const initialState: TasksStateType = {
 
 }
 
-export const tasksReducer = (state: TasksStateType = initialState, action: ActionsType): TasksStateType => {
+export const tasksReducer = (state: TasksStateType = initialState, action: TasksActionsType): TasksStateType => {
     switch (action.type) {
         case 'REMOVE-TASK': {
             const stateCopy = {...state}
@@ -157,10 +157,10 @@ export const setTasksAC = (tasks: Array<TaskType>, todolistId: string): SetTasks
 //  }
 
  export const fetchTasksTC =(todolistId:string)  => {
-    return (dispatch: Dispatch) =>{
+    return (dispatch: Dispatch<TasksActionsType> ) =>{
     todolistsAPI.getTasks(todolistId)
         .then((res) => {
-                        dispatch(setTasksAC(res.data.items))
+     dispatch(setTasksAC(res.data.items,todolistId))
         })
     }
  }

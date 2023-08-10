@@ -1,6 +1,6 @@
 import thunk from 'redux-thunk';
-import { tasksReducer } from './tasks-reducer';
-import { todolistsReducer } from './todolists-reducer';
+import { TasksActionsType, tasksReducer } from './tasks-reducer';
+import { TodolistActionsType, todolistsReducer } from './todolists-reducer';
 import {applyMiddleware, combineReducers, createStore, legacy_createStore} from 'redux';
 
 // объединяя reducer-ы с помощью combineReducers,
@@ -14,6 +14,9 @@ export const store = legacy_createStore(rootReducer, applyMiddleware(thunk));
 // определить автоматически тип всего объекта состояния
 export type AppRootStateType = ReturnType<typeof rootReducer>
 
+// все типы акшенов
+
+export type AppActionsType = TodolistActionsType | TasksActionsType
 // а это, чтобы можно было в консоли браузера обращаться к store в любой момент
 // @ts-ignore
 window.store = store;

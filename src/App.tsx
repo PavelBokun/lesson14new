@@ -24,6 +24,7 @@ import {
 import {
   
   
+  addTaskTC,
   changeTaskStatusAC,
   changeTaskStatusTC,
   changeTaskTitleAC,
@@ -55,8 +56,8 @@ function App() {
     dispatch(getTodoTC())
   },[])
 
-  const removeTask = useCallback(function (id: string, todolistId: string) {
-        dispatch(deleteTasksTC(todolistId,id));
+  const removeTask = useCallback(function (taskId: string, todolistId: string) {
+        dispatch(deleteTasksTC(taskId,todolistId));
   }, []);
 
   const addTask = useCallback(function (title: string, todolistId: string) {
@@ -70,7 +71,7 @@ function App() {
     todolistId: string
   ) {
     
-    dispatch(changeTaskStatusTC());
+    dispatch(changeTaskStatusTC(todolistId,id,status));
   },
   []);
 

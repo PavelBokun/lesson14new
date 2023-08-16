@@ -5,11 +5,13 @@ import {
   RemoveTodolistActionType,
   SetTodolistsActionType,
   _SetTodolistsActionType,
+ 
 } from "./todolists-reducer";
 import {
   TaskPriorities,
   TaskStatuses,
   TaskType,
+  UpdateTaskModelType,
   todolistsAPI,
 } from "../api/todolists-api";
 import { Dispatch } from "redux";
@@ -62,6 +64,7 @@ export type TasksActionsType =
   // | SetTasksActionType
   |SetTasksTypeAction
   | _SetTodolistsActionType
+  
 
 const initialState: TasksStateType = {
   /*"todolistId1": [
@@ -234,7 +237,7 @@ export const deleteTasksTC = (taskId: string, todolistId: string) =>
   };
 
 
-export const addTasksTC = (todolistId: string, title: string) => {
+export const addTaskTC = (todolistId: string, title: string) => {
   return (dispatch: Dispatch<TasksActionsType>) => {
     todolistsAPI.createTask(todolistId, title).then((res) => {
       const task=res.data.data.item;
@@ -243,14 +246,23 @@ export const addTasksTC = (todolistId: string, title: string) => {
     });
   };
 }
-  export const changeTaskStatusTC = (todolistId:string, tacskId: string, status: string) => {
+  export const changeTaskStatusTC = (todolistId:string, taskId: string, status: TaskStatuses) => {
     return (dispatch: Dispatch, getState:()=>AppRootStateType) => {
-      const task= getState().tasks[todolistId].find(()=>{t.id===todolistId})
-      todolistsAPI.updateTask(todolistId, tacskId,status).then((res) => {
-        const task=res.data.data.item;
-        const action= addTaskAC(task,todolistId) 
-        dispatch(action)
-      });
-    };
+      let task= getState().tasks[todolistId].find((t)=>t.id===taskId)
+      if(task){
+
+        const model: UpdateTaskModelType = {
+          title: task.title,
+          description:task.description,
+          deadline:task.deadline,
+          priority:task.priority,
+          startDate:task.startDate,
+          status
+        }
+          todolistsAPI.updateTask(todolistId,taskId, model)
+          .then(()=>{dispatch(changeTaskStatusAC(taskId, status,todolistId))})
+        };
+        }
+    
   }
 

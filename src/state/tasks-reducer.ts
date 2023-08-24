@@ -222,13 +222,27 @@ export const setTasksAC=( todolistId:string,tasks:TaskType[])=>({type:"SET-TASKS
 //         })
 //  }
 
-export const fetchTasksTC = (todolistId: string) => {
-  return (dispatch: Dispatch<TasksActionsType>) => {
-    todolistsAPI.getTasks(todolistId).then((res) => {
-      dispatch(setTasksAC(todolistId,res.data.items));
-    });
-  };
-};
+// export const fetchTasksTC = (todolistId: string) => {
+//   return (dispatch: Dispatch<TasksActionsType>) => {
+//     todolistsAPI.getTasks(todolistId).then((res) => {
+//       dispatch(setTasksAC(todolistId,res.data.items));
+//     });
+//   };
+// };
+
+export const fetchTasksTC = (todolistId: string) => 
+{ return async (dispatch:Dispatch<TasksActionsType> ) => {
+  try{
+    const res= await todolistsAPI.getTasks(todolistId)
+    dispatch(setTasksAC(todolistId,res.data.items));
+  }
+  catch{
+    // Обработка ошибок, если необходимо
+  }
+}
+    };
+  
+
 export const deleteTasksTC = (taskId: string, todolistId: string) => 
   (dispatch: Dispatch<TasksActionsType>) => {
     todolistsAPI.deleteTask(todolistId, taskId).then(() => {
